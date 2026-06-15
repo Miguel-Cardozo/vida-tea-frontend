@@ -1,7 +1,60 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { router } from "expo-router";
+import { apiFetch } from "../services/api";
 
 export default function Cadastro() {
+  const [nome, setNome] = useState("");
+  const [sobrenome, setSobrenome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [carregando, setCarregando] = useState(false);
+
+  async function fazerCadastro() {
+    try {
+      if (!nome || !sobrenome || !email || !senha) {
+        Alert.alert("Atenção", "Preencha nome, sobrenome, e-mail e senha.");
+        return;
+      }
+
+      if (senha.length < 6) {
+        Alert.alert("Atenção", "A senha deve ter pelo menos 6 caracteres.");
+        return;
+      }
+
+      setCarregando(true);
+
+      const nomeCompleto = `${nome} ${sobrenome}`;
+
+      const resposta = await apiFetch("/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          nome: nomeCompleto,
+          email,
+          senha,
+          telefone,
+        }),
+      });
+
+      console.log("Cadastro realizado:", resposta);
+
+      Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
+      router.push("/login");
+    } catch (error: any) {
+      Alert.alert("Erro no cadastro", error.message);
+    } finally {
+      setCarregando(false);
+    }
+  }
+
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
@@ -12,14 +65,58 @@ export default function Cadastro() {
         <View style={styles.content}>
           <Text style={styles.title}>Faça seu cadastro</Text>
 
-          <TextInput placeholder="Nome" placeholderTextColor="#999" style={styles.input} />
-          <TextInput placeholder="Sobrenome" placeholderTextColor="#999" style={styles.input} />
-          <TextInput placeholder="Número Whatsapp" placeholderTextColor="#999" style={styles.input} />
-          <TextInput placeholder="E-mail" placeholderTextColor="#999" style={styles.input} />
-          <TextInput placeholder="Senha" placeholderTextColor="#999" secureTextEntry style={styles.input} />
+          <TextInput
+            placeholder="Nome"
+            placeholderTextColor="#999"
+            style={styles.input}
+            value={nome}
+            onChangeText={setNome}
+          />
 
-          <TouchableOpacity style={styles.button} onPress={() => router.push("/home")}>
-            <Text style={styles.buttonText}>Continuar</Text>
+          <TextInput
+            placeholder="Sobrenome"
+            placeholderTextColor="#999"
+            style={styles.input}
+            value={sobrenome}
+            onChangeText={setSobrenome}
+          />
+
+          <TextInput
+            placeholder="Número Whatsapp"
+            placeholderTextColor="#999"
+            style={styles.input}
+            value={telefone}
+            onChangeText={setTelefone}
+            keyboardType="phone-pad"
+          />
+
+          <TextInput
+            placeholder="E-mail"
+            placeholderTextColor="#999"
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+
+          <TextInput
+            placeholder="Senha"
+            placeholderTextColor="#999"
+            secureTextEntry
+            style={styles.input}
+            value={senha}
+            onChangeText={setSenha}
+          />
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={fazerCadastro}
+            disabled={carregando}
+          >
+            <Text style={styles.buttonText}>
+              {carregando ? "Cadastrando..." : "Continuar"}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.push("/login")}>
