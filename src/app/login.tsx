@@ -1,13 +1,48 @@
+import { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { router } from "expo-router";
+import { apiFetch } from "../services/api";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [carregando, setCarregando] = useState(false);
+
+  async function fazerLogin() {
+    try {
+      if (!email || !senha) {
+        Alert.alert("Atenção", "Preencha e-mail e senha.");
+        return;
+      }
+
+      setCarregando(true);
+
+      const resposta = await apiFetch("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          senha,
+        }),
+      });
+
+      console.log("Login realizado:", resposta);
+
+      Alert.alert("Sucesso", "Login realizado com sucesso!");
+      router.push("/home");
+    } catch (error: any) {
+      Alert.alert("Erro no login", error.message);
+    } finally {
+      setCarregando(false);
+    }
+  }
+
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
@@ -22,6 +57,10 @@ export default function Login() {
             placeholder="E-mail"
             placeholderTextColor="#999"
             style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
 
           <TextInput
@@ -29,48 +68,45 @@ export default function Login() {
             placeholderTextColor="#999"
             secureTextEntry
             style={styles.input}
+            value={senha}
+            onChangeText={setSenha}
           />
-<TouchableOpacity onPress={() => router.push("/esqueci-senha")}>
-  <Text style={styles.forgot}>
-    Esqueci minha senha
-  </Text>
-</TouchableOpacity>
-         <TouchableOpacity
-  style={styles.button}
-  onPress={() => router.push("/home")}
->
-  <Text style={styles.buttonText}>
-    Entrar
-  </Text>
-</TouchableOpacity>
 
-         <TouchableOpacity
-  style={styles.outlineButton}
-  onPress={() => router.push("/cadastro")}
->
-  <Text style={styles.outlineText}>
-    Cadastre-se
-  </Text>
-</TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/esqueci-senha")}>
+            <Text style={styles.forgot}>Esqueci minha senha</Text>
+          </TouchableOpacity>
 
-         <TouchableOpacity onPress={() => router.push("/termos")}>
-  <Text style={styles.terms}>
-    Termos de Uso e Política de Privacidade
-  </Text>
-</TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={fazerLogin}
+            disabled={carregando}
+          >
+            <Text style={styles.buttonText}>
+              {carregando ? "Entrando..." : "Entrar"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.outlineButton}
+            onPress={() => router.push("/cadastro")}
+          >
+            <Text style={styles.outlineText}>Cadastre-se</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push("/termos")}>
+            <Text style={styles.terms}>
+              Termos de Uso e Política de Privacidade
+            </Text>
+          </TouchableOpacity>
 
           <View style={styles.divider}>
             <View style={styles.line} />
-            <Text style={styles.dividerText}>
-              Entrar com
-            </Text>
+            <Text style={styles.dividerText}>Entrar com</Text>
             <View style={styles.line} />
           </View>
 
           <TouchableOpacity style={styles.googleButton}>
-            <Text style={styles.googleText}>
-              G Google
-            </Text>
+            <Text style={styles.googleText}>G Google</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -101,7 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#FFF",
-
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
