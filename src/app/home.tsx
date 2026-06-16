@@ -1,91 +1,111 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home() {
+  const [nomeUsuario, setNomeUsuario] = useState("Usuário");
+
+  useEffect(() => {
+    async function carregarUsuario() {
+      const usuarioSalvo = await AsyncStorage.getItem("usuario");
+
+      if (usuarioSalvo) {
+        const usuario = JSON.parse(usuarioSalvo);
+        setNomeUsuario(usuario.nome || "Usuário");
+      }
+    }
+
+    carregarUsuario();
+  }, []);
+
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
         <View style={styles.topBar}>
-          <Text style={styles.logo}>VIDA{"\n"}TEA</Text>
-         <TouchableOpacity onPress={() => router.push("/perfil")}>
-  <Text style={styles.avatar}>👤</Text>
-</TouchableOpacity>
+          <Image
+            source={require("../../assets/images/logopequeno.jpeg")}
+            style={styles.logo}
+          />
+
+          <TouchableOpacity
+            style={styles.avatar}
+            onPress={() => router.push("/perfil")}
+          >
+            <Text style={styles.avatarText}>👤</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.welcomeCard}>
           <Text style={styles.welcomeText}>
-            Olá Veridiana Patussi,{"\n"}
+            Olá {nomeUsuario},{"\n"}
             o que você está{"\n"}
             procurando hoje?
           </Text>
-          <Text style={styles.puzzle}>🧩</Text>
+
+          <Image
+            source={require("../../assets/images/quebracabeca.jpeg")}
+            style={styles.puzzleImage}
+          />
         </View>
 
         <View style={styles.grid}>
-         <TouchableOpacity
-  style={styles.card}
-  onPress={() => router.push("/duvidas")}
->
-            <View style={styles.imageFake}>
-              <Text style={styles.imageIcon}>🩺</Text>
+          <TouchableOpacity style={styles.card} onPress={() => router.push("/duvidas")}>
+            <Image source={require("../../assets/images/duvidas.jpeg")} style={styles.cardImage} />
+            <View style={styles.cardBody}>
+              <Text style={styles.cardTitle}>Tire suas dúvidas{"\n"}com especialistas</Text>
+              <View style={styles.divider} />
+              <Text style={styles.cardText}>Tenha acesso a profissionais da saúde para esclarecimentos.</Text>
             </View>
-            <Text style={styles.cardTitle}>Tire suas dúvidas{"\n"}com especialistas</Text>
-            <Text style={styles.cardText}>
-              Tenha acesso a profissionais da saúde para esclarecimentos.
-            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.card} onPress={() => router.push("/beneficios")}>
-            <View style={styles.imageFake}>
-              <Text style={styles.imageIcon}>📄</Text>
+            <Image source={require("../../assets/images/beneficios.jpeg")} style={styles.cardImage} />
+            <View style={styles.cardBody}>
+              <Text style={styles.cardTitle}>Solicitação de{"\n"}Benefícios</Text>
+              <View style={styles.divider} />
+              <Text style={styles.cardText}>Solicitação de benefícios, downloads e modelos de documentos.</Text>
             </View>
-            <Text style={styles.cardTitle}>Solicitação de{"\n"}Benefícios</Text>
-            <Text style={styles.cardText}>
-              Benefícios, documentos e modelos de documentos.
-            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.card} onPress={() => router.push("/clinicas")}>
-            <View style={styles.imageFake}>
-              <Text style={styles.imageIcon}>🏥</Text>
+            <Image source={require("../../assets/images/rede.jpeg")} style={styles.cardImage} />
+            <View style={styles.cardBody}>
+              <Text style={styles.cardTitle}>Rede de Serviços e{"\n"}Especialistas</Text>
+              <View style={styles.divider} />
+              <Text style={styles.cardText}>Busca geolocalizada de profissionais e centros de apoio.</Text>
             </View>
-            <Text style={styles.cardTitle}>Rede de Serviços e{"\n"}Especialistas</Text>
-            <Text style={styles.cardText}>
-              Busca geolocalizada de clínicas e profissionais.
-            </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-  style={styles.card}
-  onPress={() => router.push("/informacoes")}
->
-            <View style={styles.imageFake}>
-              <Text style={styles.imageIcon}>📚</Text>
+          <TouchableOpacity style={styles.card} onPress={() => router.push("/informacoes")}>
+            <Image source={require("../../assets/images/informacoes.jpeg")} style={styles.cardImage} />
+            <View style={styles.cardBody}>
+              <Text style={styles.cardTitle}>Central de{"\n"}Informações</Text>
+              <View style={styles.divider} />
+              <Text style={styles.cardText}>Artigos, vídeos e orientações atualizadas sobre o universo do TEA.</Text>
             </View>
-            <Text style={styles.cardTitle}>Central de{"\n"}Informações</Text>
-            <Text style={styles.cardText}>
-              Artigos, vídeos e orientações sobre o universo do TEA.
-            </Text>
           </TouchableOpacity>
         </View>
 
-       <View style={styles.bottomMenu}>
-  <TouchableOpacity onPress={() => router.push("/home")}>
-    <Text style={styles.menuIcon}>⌂</Text>
-  </TouchableOpacity>
+        <View style={styles.bottomMenu}>
+          <TouchableOpacity onPress={() => router.push("/home")}>
+            <Image source={require("../../assets/images/home.jpeg")} style={styles.menuImage} />
+          </TouchableOpacity>
 
-  <TouchableOpacity onPress={() => router.push("/perfil")}>
-    <Text style={styles.menuIcon}>👤</Text>
-  </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/perfil")}>
+            <Image source={require("../../assets/images/perfil.jpeg")} style={styles.menuImage} />
+          </TouchableOpacity>
 
-  <TouchableOpacity onPress={() => router.push("/grupo")}>
-    <Text style={styles.menuIcon}>💬</Text>
-  </TouchableOpacity>
-
-  <TouchableOpacity onPress={() => router.push("/configuracoes")}>
-    <Text style={styles.menuIcon}>⚙️</Text>
-  </TouchableOpacity>
-</View>
+          <TouchableOpacity onPress={() => router.push("/grupo")}>
+            <Image source={require("../../assets/images/zap.jpeg")} style={styles.menuImage} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -94,141 +114,149 @@ export default function Home() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "#222",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#FFF",
   },
 
   phone: {
-    width: 390,
-    height: 844,
-    backgroundColor: "#EAF8FF",
-    borderRadius: 32,
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#FFF",
     overflow: "hidden",
   },
 
   topBar: {
-    height: 70,
-    backgroundColor: "#fff",
-    paddingHorizontal: 22,
+    height: 58,
+    backgroundColor: "#FFF",
+    paddingHorizontal: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
 
   logo: {
-    color: "#087bdc",
-    fontSize: 14,
-    fontWeight: "900",
-    lineHeight: 15,
+    width: 82,
+    height: 34,
+    resizeMode: "contain",
   },
 
   avatar: {
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#eee",
+    backgroundColor: "#EEE",
     alignItems: "center",
     justifyContent: "center",
   },
 
+  avatarText: {
+    fontSize: 22,
+  },
+
   welcomeCard: {
-    height: 120,
-    backgroundColor: "#fff",
+    height: 112,
+    backgroundColor: "#FFF",
     marginHorizontal: 18,
-    marginTop: 10,
+    marginTop: 12,
     borderRadius: 14,
-    padding: 22,
+    paddingLeft: 20,
+    paddingRight: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-
     shadowColor: "#000",
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 5,
   },
 
   welcomeText: {
-    color: "#087bdc",
-    fontSize: 19,
+    color: "#087BDC",
+    fontSize: 18,
     fontWeight: "900",
-    lineHeight: 24,
+    lineHeight: 23,
+    flex: 1,
   },
 
-  puzzle: {
-    fontSize: 55,
+  puzzleImage: {
+    width: 105,
+    height: 105,
+    resizeMode: "contain",
+    marginRight: -18,
   },
 
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     paddingHorizontal: 18,
-    marginTop: 22,
+    marginTop: 20,
     justifyContent: "space-between",
   },
 
   card: {
     width: "48%",
-    height: 205,
-    backgroundColor: "#fff",
-    borderRadius: 14,
-    marginBottom: 20,
+    height: 160,
+    backgroundColor: "#FFF",
+    borderRadius: 12,
+    marginBottom: 18,
     overflow: "hidden",
-
     shadowColor: "#000",
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.14,
     shadowRadius: 8,
     elevation: 5,
   },
 
-  imageFake: {
-    height: 82,
-    backgroundColor: "#D8F1FF",
-    alignItems: "center",
-    justifyContent: "center",
+  cardImage: {
+    width: "100%",
+    height: 72,
+    resizeMode: "cover",
   },
 
-  imageIcon: {
-    fontSize: 34,
+  cardBody: {
+    paddingHorizontal: 9,
+    paddingTop: 6,
   },
 
   cardTitle: {
-    color: "#1a1a1a",
-    fontSize: 13,
-    fontWeight: "800",
-    paddingHorizontal: 10,
-    paddingTop: 8,
-    paddingBottom: 5,
+    color: "#222",
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 14,
+  },
+
+  divider: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "#087BDC",
+    marginVertical: 5,
   },
 
   cardText: {
     color: "#555",
-    fontSize: 10,
-    paddingHorizontal: 10,
-    lineHeight: 13,
+    fontSize: 9,
+    lineHeight: 11,
   },
 
   bottomMenu: {
     position: "absolute",
     bottom: 18,
-    left: 55,
-    right: 55,
-    height: 52,
-    backgroundColor: "#fff",
-    borderRadius: 20,
+    width: 180,
+    height: 48,
+    alignSelf: "center",
+    backgroundColor: "#FFF",
+    borderRadius: 18,
     flexDirection: "row",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    justifyContent: "space-around",
-
     shadowColor: "#000",
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.18,
     shadowRadius: 8,
     elevation: 8,
   },
 
-  menuIcon: {
-    fontSize: 24,
-    color: "#087bdc",
+  menuImage: {
+    width: 22,
+    height: 22,
+    resizeMode: "contain",
   },
 });

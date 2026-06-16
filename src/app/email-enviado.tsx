@@ -1,8 +1,9 @@
 import {
   View,
- Text,
+  Text,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from "react-native";
 import { router } from "expo-router";
 
@@ -10,44 +11,38 @@ export default function EmailEnviado() {
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
-        <View style={styles.header}>
-          <Text style={styles.logoText}>
-            VIDA{"\n"}TEA
-          </Text>
-        </View>
+        <Image
+          source={require("../../assets/images/logocompleta.jpeg")}
+          style={styles.headerImage}
+        />
 
         <View style={styles.content}>
-          <Text style={styles.icon}>📧✅</Text>
+          <Image
+            source={require("../../assets/images/email.jpeg")}
+            style={styles.emailImage}
+          />
 
-          <Text style={styles.title}>
-            E-mail enviado!
-          </Text>
+          <Text style={styles.title}>E-mail enviado!</Text>
 
           <Text style={styles.description}>
             Aguarde o e-mail para realizar a{"\n"}
-            recuperação de senha
+            recuperação de senha.
           </Text>
 
           <TouchableOpacity
             style={styles.okButton}
             onPress={() => router.push("/login")}
           >
-            <Text style={styles.okText}>
-              OK
-            </Text>
+            <Text style={styles.okText}>OK</Text>
           </TouchableOpacity>
 
           <Text style={styles.smallText}>
             Caso não receba nosso e-mail em{"\n"}
-            alguns minutos, tente reenviar
+            alguns minutos, tente reenviar.
           </Text>
 
-          <TouchableOpacity
-            style={styles.reenviarButton}
-          >
-            <Text style={styles.reenviarText}>
-              REENVIAR
-            </Text>
+          <TouchableOpacity style={styles.reenviarButton}>
+            <Text style={styles.reenviarText}>REENVIAR</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -56,63 +51,50 @@ export default function EmailEnviado() {
 }
 
 const styles = StyleSheet.create({
+  
   background: {
     flex: 1,
-    backgroundColor: "#222",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#FFF",
   },
 
   phone: {
-    width: 390,
-    height: 844,
+    flex: 1,
+    width: "100%",
+    height: "100%",
     backgroundColor: "#FFF",
-    borderRadius: 32,
     overflow: "hidden",
   },
 
-  header: {
-    height: 230,
-    backgroundColor: "#FFF",
-    borderBottomLeftRadius: 45,
-    borderBottomRightRadius: 45,
-    justifyContent: "center",
-    alignItems: "center",
-
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-    elevation: 10,
-  },
-
-  logoText: {
-    color: "#0070d9",
-    fontSize: 38,
-    fontWeight: "900",
-    textAlign: "center",
+  headerImage: {
+    width: "100%",
+    height: 150,
+    resizeMode: "stretch",
   },
 
   content: {
     paddingHorizontal: 34,
-    marginTop: 55,
+    marginTop: 20,
     alignItems: "center",
   },
 
-  icon: {
-  fontSize: 55,
-  marginBottom: 12,
-},
+  emailImage: {
+    width: 120,
+    height: 80,
+    resizeMode: "contain",
+    marginBottom: 20,
+  },
 
   title: {
-    color: "#087bdc",
-    fontSize: 24,
-    fontWeight: "800",
-    marginBottom: 20,
+    color: "#087BDC",
+    fontSize: 26,
+    fontWeight: "900",
+    marginBottom: 16,
+    textAlign: "center",
   },
 
   description: {
     color: "#666",
-    fontSize: 12,
+    fontSize: 13,
     textAlign: "center",
     lineHeight: 18,
     marginBottom: 25,
@@ -121,7 +103,7 @@ const styles = StyleSheet.create({
   okButton: {
     width: "100%",
     height: 46,
-    backgroundColor: "#087bdc",
+    backgroundColor: "#087BDC",
     borderRadius: 8,
     justifyContent: "center",
     marginBottom: 20,
@@ -146,13 +128,13 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 46,
     borderWidth: 1.5,
-    borderColor: "#087bdc",
+    borderColor: "#087BDC",
     borderRadius: 8,
     justifyContent: "center",
   },
 
   reenviarText: {
-    color: "#087bdc",
+    color: "#087BDC",
     textAlign: "center",
     fontWeight: "800",
     fontSize: 16,

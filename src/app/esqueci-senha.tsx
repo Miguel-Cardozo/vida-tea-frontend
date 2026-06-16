@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from "react-native";
 import { router } from "expo-router";
 
@@ -11,35 +12,36 @@ export default function EsqueciSenha() {
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
-        <View style={styles.header}>
-          <Text style={styles.logoText}>
-            VIDA{"\n"}TEA
-          </Text>
-        </View>
+        <Image
+          source={require("../../assets/images/logocompleta.jpeg")}
+          style={styles.headerImage}
+        />
 
         <View style={styles.content}>
-          <Text style={styles.title}>
-            Esqueceu a senha?
-          </Text>
+          <Text style={styles.title}>Esqueceu a senha?</Text>
 
           <Text style={styles.description}>
             Enviaremos um e-mail para a autenticação e{"\n"}
-            recuperação de senha
+            recuperação de senha.
           </Text>
 
           <TextInput
             placeholder="E-mail"
             placeholderTextColor="#999"
             style={styles.input}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
 
           <TouchableOpacity
             style={styles.button}
             onPress={() => router.push("/email-enviado")}
           >
-            <Text style={styles.buttonText}>
-              Enviar
-            </Text>
+            <Text style={styles.buttonText}>Enviar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push("/login")}>
+            <Text style={styles.backText}>Voltar para o login</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -48,49 +50,33 @@ export default function EsqueciSenha() {
 }
 
 const styles = StyleSheet.create({
+  
   background: {
     flex: 1,
-    backgroundColor: "#222",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#FFF",
   },
 
   phone: {
-    width: 390,
-    height: 844,
+    flex: 1,
+    width: "100%",
+    height: "100%",
     backgroundColor: "#FFF",
-    borderRadius: 32,
     overflow: "hidden",
   },
 
-  header: {
-    height: 230,
-    backgroundColor: "#FFF",
-    borderBottomLeftRadius: 45,
-    borderBottomRightRadius: 45,
-    justifyContent: "center",
-    alignItems: "center",
-
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-    elevation: 10,
-  },
-
-  logoText: {
-    color: "#0070d9",
-    fontSize: 38,
-    fontWeight: "900",
-    textAlign: "center",
+  headerImage: {
+    width: "100%",
+    height: 160,
+    resizeMode: "stretch",
   },
 
   content: {
-    paddingHorizontal: 34,
-    marginTop: 55,
+    paddingHorizontal: 28,
+    marginTop: 20,
   },
 
   title: {
-    color: "#087bdc",
+    color: "#087BDC",
     fontSize: 24,
     fontWeight: "800",
     textAlign: "center",
@@ -108,7 +94,7 @@ const styles = StyleSheet.create({
   input: {
     height: 42,
     borderWidth: 1.5,
-    borderColor: "#0088ff",
+    borderColor: "#0088FF",
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 25,
@@ -116,9 +102,10 @@ const styles = StyleSheet.create({
 
   button: {
     height: 46,
-    backgroundColor: "#087bdc",
+    backgroundColor: "#087BDC",
     borderRadius: 8,
     justifyContent: "center",
+    marginBottom: 20,
   },
 
   buttonText: {
@@ -127,5 +114,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "800",
     letterSpacing: 1,
+  },
+
+  backText: {
+    color: "#087BDC",
+    textAlign: "center",
+    fontSize: 12,
+    fontWeight: "700",
   },
 });

@@ -6,9 +6,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
 } from "react-native";
 import { router } from "expo-router";
 import { apiFetch } from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -33,6 +36,7 @@ export default function Login() {
       });
 
       console.log("Login realizado:", resposta);
+      await AsyncStorage.setItem("usuario", JSON.stringify(resposta.usuario));
 
       Alert.alert("Sucesso", "Login realizado com sucesso!");
       router.push("/home");
@@ -46,9 +50,10 @@ export default function Login() {
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
-        <View style={styles.header}>
-          <Text style={styles.logoText}>VIDA{"\n"}TEA</Text>
-        </View>
+        <Image
+          source={require("../../assets/images/logocompleta.jpeg")}
+          style={styles.headerImage}
+        />
 
         <View style={styles.content}>
           <Text style={styles.title}>Entre em sua conta</Text>
@@ -117,46 +122,30 @@ export default function Login() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "#222",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#FFF",
   },
 
   phone: {
-    width: 390,
-    height: 844,
+    flex: 1,
+    width: "100%",
+    height: "100%",
     backgroundColor: "#FFF",
-    borderRadius: 32,
     overflow: "hidden",
   },
 
-  header: {
-    height: 220,
-    borderBottomLeftRadius: 45,
-    borderBottomRightRadius: 45,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 10,
-  },
-
-  logoText: {
-    color: "#0070d9",
-    fontSize: 38,
-    fontWeight: "900",
-    textAlign: "center",
+  headerImage: {
+    width: "100%",
+    height: 160,
+    resizeMode: "stretch",
   },
 
   content: {
     paddingHorizontal: 28,
-    marginTop: 28,
+    marginTop: 8,
   },
 
   title: {
-    color: "#0070d9",
+    color: "#0070D9",
     fontSize: 22,
     fontWeight: "800",
     textAlign: "center",
@@ -165,7 +154,7 @@ const styles = StyleSheet.create({
 
   input: {
     borderWidth: 1.5,
-    borderColor: "#0088ff",
+    borderColor: "#0088FF",
     borderRadius: 8,
     height: 42,
     paddingHorizontal: 12,
@@ -173,15 +162,15 @@ const styles = StyleSheet.create({
   },
 
   forgot: {
-    color: "#0070d9",
+    color: "#0070D9",
     fontSize: 11,
     fontWeight: "700",
     textAlign: "right",
-    marginBottom: 24,
+    marginBottom: 20,
   },
 
   button: {
-    backgroundColor: "#087bdc",
+    backgroundColor: "#087BDC",
     height: 48,
     borderRadius: 8,
     justifyContent: "center",
@@ -191,31 +180,32 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFF",
     textAlign: "center",
-    fontWeight: "800",
     fontSize: 16,
+    fontWeight: "800",
   },
 
   outlineButton: {
     height: 48,
     borderRadius: 8,
     borderWidth: 1.5,
-    borderColor: "#087bdc",
+    borderColor: "#087BDC",
     justifyContent: "center",
+    marginBottom: 10,
   },
 
   outlineText: {
-    color: "#087bdc",
+    color: "#087BDC",
     textAlign: "center",
-    fontWeight: "800",
     fontSize: 16,
+    fontWeight: "800",
   },
 
   terms: {
-    color: "#087bdc",
+    color: "#087BDC",
     fontSize: 11,
     fontWeight: "700",
     textAlign: "center",
-    marginVertical: 22,
+    marginVertical: 20,
   },
 
   divider: {
@@ -227,23 +217,23 @@ const styles = StyleSheet.create({
   line: {
     flex: 1,
     height: 1,
-    backgroundColor: "#087bdc",
+    backgroundColor: "#087BDC",
   },
 
   dividerText: {
-    color: "#087bdc",
+    color: "#087BDC",
     fontSize: 11,
     marginHorizontal: 10,
   },
 
   googleButton: {
     backgroundColor: "#E5F6FF",
-    paddingVertical: 14,
     borderRadius: 8,
+    paddingVertical: 14,
   },
 
   googleText: {
-    color: "#087bdc",
+    color: "#087BDC",
     textAlign: "center",
     fontSize: 18,
     fontWeight: "800",

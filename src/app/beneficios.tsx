@@ -1,4 +1,12 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Linking,
+} from "react-native";
 import { router } from "expo-router";
 
 export default function Beneficios() {
@@ -6,8 +14,17 @@ export default function Beneficios() {
     <View style={styles.background}>
       <View style={styles.phone}>
         <View style={styles.topBar}>
-          <Text style={styles.logo}>VIDA{"\n"}TEA</Text>
-          <Text style={styles.avatar}>👤</Text>
+          <Image
+            source={require("../../assets/images/logopequeno.jpeg")}
+            style={styles.logo}
+          />
+
+          <TouchableOpacity
+            style={styles.avatar}
+            onPress={() => router.push("/perfil")}
+          >
+            <Text style={styles.avatarText}>👤</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity onPress={() => router.push("/home")}>
@@ -24,159 +41,231 @@ export default function Beneficios() {
           />
           <Text style={styles.searchIcon}>⌕</Text>
         </View>
+<View style={styles.grid}>
+  <TouchableOpacity
+    style={styles.card}
+    onPress={() =>
+      Linking.openURL(
+        "https://bilheteunico.sptrans.com.br/especial/pessoa-com-deficiencia/"
+      )
+    }
+  >
+    <Image
+      source={require("../../assets/images/bilhete.jpeg")}
+      style={styles.cardImage}
+    />
+    <Text style={styles.cardTitle}>
+      Bilhete Único{"\n"}Especial da Pessoa{"\n"}com Deficiência
+    </Text>
+  </TouchableOpacity>
 
-        <View style={styles.grid}>
-          <TouchableOpacity style={styles.card}>
-            <View style={styles.imageFake}><Text style={styles.emoji}>🚌</Text></View>
-            <Text style={styles.cardTitle}>Bilhete Único{"\n"}Especial da Pessoa{"\n"}com Deficiência</Text>
-          </TouchableOpacity>
+  <TouchableOpacity
+    style={styles.card}
+    onPress={() =>
+      Linking.openURL(
+        "https://www.gov.br/pt-br/servicos/solicitar-beneficio-assistencial-a-pessoa-com-deficiencia"
+      )
+    }
+  >
+    <Image
+      source={require("../../assets/images/bpc.jpeg")}
+      style={styles.cardImage}
+    />
+    <Text style={styles.cardTitle}>
+      Benefício à Pessoa{"\n"}com Deficiência{"\n"}(BPC/LOAS)
+    </Text>
+  </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card}>
-            <View style={styles.imageFake}><Text style={styles.emoji}>👥</Text></View>
-            <Text style={styles.cardTitle}>Benefício à Pessoa{"\n"}com Deficiência{"\n"}(BPC/LOAS)</Text>
-          </TouchableOpacity>
+  <TouchableOpacity
+    style={styles.card}
+    onPress={() =>
+      Linking.openURL(
+        "https://www.detran.sp.gov.br/detransp/pb/servico/veiculo/solicitar_cartao_para_estacionamento_em_vaga_especial_pcd?id=carta_de_servico_solicitar_cartao_para_estacionamento_em_vaga_especial_pcd"
+      )
+    }
+  >
+    <Image
+      source={require("../../assets/images/cartao.jpeg")}
+      style={styles.cardImage}
+    />
+    <Text style={styles.cardTitle}>
+      Cartão para Vaga{"\n"}Especial PCD
+    </Text>
+  </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card}>
-            <View style={styles.imageFake}><Text style={styles.emoji}>🚗</Text></View>
-            <Text style={styles.cardTitle}>Cartão para Vaga{"\n"}Especial PCD</Text>
-          </TouchableOpacity>
+  <TouchableOpacity
+    style={styles.card}
+    onPress={() => Linking.openURL("https://ciptea.sp.gov.br")}
+  >
+    <Image
+      source={require("../../assets/images/beneficios.jpeg")}
+      style={styles.cardImage}
+    />
+    <Text style={styles.cardTitle}>
+      Carteira{"\n"}CIPTEA
+    </Text>
+  </TouchableOpacity>
+</View>
+       <View style={styles.bottomMenu}>
+  <TouchableOpacity onPress={() => router.push("/home")}>
+    <Image source={require("../../assets/images/home.jpeg")} style={styles.menuImage} />
+  </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card}>
-            <View style={styles.imageFake}><Text style={styles.emoji}>🪪</Text></View>
-            <Text style={styles.cardTitle}>Carteira{"\n"}CIPTEA</Text>
-          </TouchableOpacity>
-        </View>
+  <TouchableOpacity onPress={() => router.push("/perfil")}>
+    <Image source={require("../../assets/images/perfil.jpeg")} style={styles.menuImage} />
+  </TouchableOpacity>
 
-        <View style={styles.bottomMenu}>
-          <TouchableOpacity onPress={() => router.push("/home")}>
-            <Text style={styles.menuIcon}>⌂</Text>
-          </TouchableOpacity>
-          <Text style={styles.menuIcon}>👤</Text>
-          <Text style={styles.menuIcon}>💬</Text>
-          <Text style={styles.menuIcon}>⚙️</Text>
-        </View>
+  <TouchableOpacity onPress={() => router.push("/grupo")}>
+    <Image source={require("../../assets/images/zap.jpeg")} style={styles.menuImage} />
+  </TouchableOpacity>
+</View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
+   background: {
     flex: 1,
-    backgroundColor: "#222",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  phone: {
-    width: 390,
-    height: 844,
     backgroundColor: "#EAF8FF",
-    borderRadius: 32,
-    overflow: "hidden",
-    paddingHorizontal: 20,
   },
+
+  phone: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#EAF8FF",
+    overflow: "hidden",
+  },
+
   topBar: {
-    height: 70,
-    backgroundColor: "#fff",
-    marginHorizontal: -20,
-    paddingHorizontal: 22,
+    height: 58,
+    backgroundColor: "#FFF",
+    paddingHorizontal: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
+
   logo: {
-    color: "#087bdc",
-    fontSize: 14,
-    fontWeight: "900",
-    lineHeight: 15,
+    width: 82,
+    height: 34,
+    resizeMode: "contain",
   },
+
   avatar: {
-    fontSize: 26,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#EEE",
+    alignItems: "center",
+    justifyContent: "center",
   },
+
+  avatarText: {
+    fontSize: 22,
+  },
+
   back: {
-    color: "#087bdc",
-    fontSize: 34,
-    marginTop: 12,
+    color: "#087BDC",
+    fontSize: 32,
+    marginLeft: 18,
+    marginTop: 8,
+    marginBottom: 2,
   },
+
   title: {
-    color: "#087bdc",
+    color: "#087BDC",
     fontSize: 18,
     fontWeight: "900",
-    marginBottom: 14,
+    marginLeft: 18,
+    marginBottom: 12,
   },
+
   searchBox: {
-    height: 42,
-    backgroundColor: "#fff",
+    height: 40,
+    backgroundColor: "#FFF",
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#bbb",
+    borderColor: "#BBB",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
-    marginBottom: 20,
+    marginHorizontal: 18,
+    marginBottom: 18,
   },
+
   searchInput: {
     flex: 1,
-    height: 42,
+    height: 40,
     fontSize: 12,
   },
+
   searchIcon: {
     fontSize: 22,
     color: "#444",
   },
+
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
+    paddingHorizontal: 18,
     justifyContent: "space-between",
   },
+
   card: {
     width: "48%",
-    height: 165,
-    backgroundColor: "#fff",
+    height: 155,
+    backgroundColor: "#FFF",
     borderRadius: 12,
-    marginBottom: 22,
+    marginBottom: 18,
     overflow: "hidden",
+
     shadowColor: "#000",
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.14,
     shadowRadius: 8,
     elevation: 5,
   },
-  imageFake: {
-    height: 92,
-    backgroundColor: "#D8F1FF",
-    alignItems: "center",
-    justifyContent: "center",
+
+  cardImage: {
+    width: "100%",
+    height: 88,
+    resizeMode: "cover",
   },
-  emoji: {
-    fontSize: 38,
-  },
+
   cardTitle: {
-    color: "#111",
-    fontSize: 13,
+    color: "#222",
+    fontSize: 12,
     fontWeight: "900",
     textAlign: "center",
+    lineHeight: 14,
     paddingHorizontal: 6,
-    paddingTop: 7,
-    lineHeight: 16,
+    paddingTop: 6,
   },
+
   bottomMenu: {
     position: "absolute",
     bottom: 18,
-    left: 55,
-    right: 55,
-    height: 52,
-    backgroundColor: "#fff",
-    borderRadius: 20,
+    width: 180,
+    height: 48,
+    alignSelf: "center",
+
+    backgroundColor: "#FFF",
+    borderRadius: 18,
+
     flexDirection: "row",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    justifyContent: "space-around",
+
     shadowColor: "#000",
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.18,
     shadowRadius: 8,
     elevation: 8,
   },
-  menuIcon: {
-    fontSize: 24,
-    color: "#087bdc",
-  },
+
+  menuImage: {
+  width: 22,
+  height: 22,
+  resizeMode: "contain",
+},
 });

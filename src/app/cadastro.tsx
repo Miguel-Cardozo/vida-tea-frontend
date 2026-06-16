@@ -6,9 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
 } from "react-native";
 import { router } from "expo-router";
 import { apiFetch } from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Cadastro() {
   const [nome, setNome] = useState("");
@@ -45,6 +47,14 @@ export default function Cadastro() {
       });
 
       console.log("Cadastro realizado:", resposta);
+      await AsyncStorage.setItem(
+        "usuario",
+        JSON.stringify({
+          nome: '${nome} ${sobrenome}',
+          email,
+          telefone,
+        })
+      );
 
       Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
       router.push("/login");
@@ -58,9 +68,10 @@ export default function Cadastro() {
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
-        <View style={styles.header}>
-          <Text style={styles.logoText}>VIDA{"\n"}TEA</Text>
-        </View>
+        <Image
+          source={require("../../assets/images/logocompleta.jpeg")}
+          style={styles.headerImage}
+        />
 
         <View style={styles.content}>
           <Text style={styles.title}>Faça seu cadastro</Text>
@@ -129,75 +140,67 @@ export default function Cadastro() {
 }
 
 const styles = StyleSheet.create({
-  background: {
+   background: {
     flex: 1,
-    backgroundColor: "#222",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#FFF",
   },
+
   phone: {
-    width: 390,
-    height: 844,
-    backgroundColor: "#fff",
-    borderRadius: 32,
-    overflow: "hidden",
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#FFF",
   },
-  header: {
-    height: 230,
-    backgroundColor: "#fff",
-    borderBottomLeftRadius: 45,
-    borderBottomRightRadius: 45,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
+
+  headerImage: {
+    width: "100%",
+    height: 160,
+    resizeMode: "stretch",
   },
-  logoText: {
-    color: "#0070d9",
-    fontSize: 38,
-    fontWeight: "900",
-    textAlign: "center",
-  },
+
   content: {
-    paddingHorizontal: 34,
-    marginTop: 42,
+    paddingHorizontal: 28,
+    marginTop: 8,
   },
+
   title: {
-    color: "#0070d9",
+    color: "#0070D9",
     fontSize: 22,
     fontWeight: "800",
     textAlign: "center",
-    marginBottom: 28,
+    marginBottom: 24,
   },
+
   input: {
     height: 42,
     borderWidth: 1.5,
-    borderColor: "#0088ff",
+    borderColor: "#0088FF",
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 12,
     fontSize: 12,
   },
+
   button: {
     height: 46,
     borderWidth: 1.5,
-    borderColor: "#087bdc",
+    borderColor: "#087BDC",
     borderRadius: 8,
     justifyContent: "center",
-    marginTop: 16,
-    marginBottom: 20,
+    marginTop: 14,
+    marginBottom: 18,
   },
+
   buttonText: {
-    color: "#087bdc",
+    color: "#087BDC",
     textAlign: "center",
     fontWeight: "900",
     fontSize: 16,
     letterSpacing: 1,
   },
+
   loginText: {
-    color: "#087bdc",
+    color: "#087BDC",
     textAlign: "center",
     fontWeight: "800",
     fontSize: 12,

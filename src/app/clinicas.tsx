@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Image,
   ScrollView,
   Linking,
   Alert,
@@ -54,17 +55,36 @@ export default function Clinicas() {
       return;
     }
 
-    Alert.alert("Localização indisponível", "Essa clínica não possui localização cadastrada.");
+    Alert.alert(
+      "Localização indisponível",
+      "Essa clínica não possui localização cadastrada."
+    );
   }
 
   function ligar(telefone: string | null) {
     if (!telefone) {
-      Alert.alert("Telefone indisponível", "Essa clínica não possui telefone cadastrado.");
+      Alert.alert(
+        "Telefone indisponível",
+        "Essa clínica não possui telefone cadastrado."
+      );
       return;
     }
 
     const telefoneLimpo = telefone.replace(/\D/g, "");
     Linking.openURL(`tel:${telefoneLimpo}`);
+  }
+
+  function abrirWhatsapp(telefone: string | null) {
+    if (!telefone) {
+      Alert.alert(
+        "WhatsApp indisponível",
+        "Essa clínica não possui WhatsApp cadastrado."
+      );
+      return;
+    }
+
+    const telefoneLimpo = telefone.replace(/\D/g, "");
+    Linking.openURL(`https://wa.me/55${telefoneLimpo}`);
   }
 
   const clinicasFiltradas = clinicas.filter((clinica) => {
@@ -80,88 +100,102 @@ export default function Clinicas() {
     <View style={styles.background}>
       <View style={styles.phone}>
         <View style={styles.topBar}>
-          <Text style={styles.logo}>VIDA{"\n"}TEA</Text>
-          <Text style={styles.avatar}>👤</Text>
-        </View>
-
-        <TouchableOpacity onPress={() => router.push("/home")}>
-          <Text style={styles.back}>‹</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Redes de Serviços e especialistas</Text>
-
-        <View style={styles.searchBox}>
-          <TextInput
-            placeholder="Buscar por localidade"
-            placeholderTextColor="#777"
-            style={styles.searchInput}
-            value={busca}
-            onChangeText={setBusca}
+          <Image
+            source={require("../../assets/images/logopequeno.jpeg")}
+            style={styles.logo}
           />
-          <Text style={styles.searchIcon}>⌕</Text>
-        </View>
 
-        <Text style={styles.filter}>Clínicas cadastradas</Text>
-
-        <View style={styles.map}>
-          <Text style={styles.mapText}>🗺️</Text>
-          <Text style={styles.pin}>📍</Text>
-        </View>
-
-        {carregando ? (
-          <Text style={styles.loading}>Carregando clínicas...</Text>
-        ) : (
-          <ScrollView
-            style={styles.list}
-            contentContainerStyle={{ paddingBottom: 90 }}
-            showsVerticalScrollIndicator={false}
+          <TouchableOpacity
+            style={styles.avatar}
+            onPress={() => router.push("/perfil")}
           >
-            {clinicasFiltradas.length === 0 ? (
-              <Text style={styles.empty}>Nenhuma clínica encontrada.</Text>
-            ) : (
-              clinicasFiltradas.map((clinica) => (
-                <View key={clinica.id} style={styles.clinicCard}>
-                  <Text style={styles.clinicTitle}>{clinica.nome} ⭐⭐⭐⭐⭐</Text>
+            <Text style={styles.avatarText}>👤</Text>
+          </TouchableOpacity>
+        </View>
 
-                  <Text style={styles.clinicText}>
-                    {clinica.descricao || "Clínica especializada em atendimento."}
-                  </Text>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.content}
+        >
+          <TouchableOpacity onPress={() => router.push("/home")}>
+            <Text style={styles.back}>‹</Text>
+          </TouchableOpacity>
 
-                  <Text style={styles.address}>
-                    {clinica.endereco} - {clinica.cidade}
-                  </Text>
+          <Text style={styles.title}>Redes de Serviços e especialistas</Text>
 
-                  <View style={styles.buttonsRow}>
-                    <TouchableOpacity onPress={() => ligar(clinica.telefone)}>
-                      <Text style={styles.smallButton}>LIGAR</Text>
-                    </TouchableOpacity>
+          <View style={styles.searchBox}>
+            <TextInput
+              placeholder="Buscar por localidade"
+              placeholderTextColor="#777"
+              style={styles.searchInput}
+              value={busca}
+              onChangeText={setBusca}
+            />
+            <Text style={styles.searchIcon}>⌕</Text>
+          </View>
 
-                    <TouchableOpacity onPress={() => abrirMapa(clinica)}>
-                      <Text style={styles.smallButton}>ROTAS</Text>
-                    </TouchableOpacity>
+          <Text style={styles.filter}>Clínicas cadastradas</Text>
 
-                    <TouchableOpacity onPress={() => ligar(clinica.telefone)}>
-                      <Text style={styles.smallButton}>WHATSAPP</Text>
-                    </TouchableOpacity>
-                  </View>
+          <Image
+            source={require("../../assets/images/gps.jpeg")}
+            style={styles.map}
+          />
+
+          {carregando ? (
+            <Text style={styles.loading}>Carregando clínicas...</Text>
+          ) : clinicasFiltradas.length === 0 ? (
+            <Text style={styles.empty}>Nenhuma clínica encontrada.</Text>
+          ) : (
+            clinicasFiltradas.map((clinica) => (
+              <View key={clinica.id} style={styles.clinicCard}>
+                <Text style={styles.clinicTitle}>{clinica.nome} ⭐⭐⭐⭐⭐</Text>
+
+                <Text style={styles.clinicText}>
+                  {clinica.descricao || "Clínica especializada em atendimento."}
+                </Text>
+
+                <Text style={styles.address}>
+                  {clinica.endereco} - {clinica.cidade}
+                </Text>
+
+                <View style={styles.buttonsRow}>
+                  <TouchableOpacity onPress={() => ligar(clinica.telefone)}>
+                    <Text style={styles.smallButton}>LIGAR</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => abrirMapa(clinica)}>
+                    <Text style={styles.smallButton}>ROTAS</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => abrirWhatsapp(clinica.telefone)}>
+                    <Text style={styles.smallButton}>WHATSAPP</Text>
+                  </TouchableOpacity>
                 </View>
-              ))
-            )}
-          </ScrollView>
-        )}
+              </View>
+            ))
+          )}
+        </ScrollView>
 
         <View style={styles.bottomMenu}>
           <TouchableOpacity onPress={() => router.push("/home")}>
-            <Text style={styles.menuIcon}>⌂</Text>
+            <Image
+              source={require("../../assets/images/home.jpeg")}
+              style={styles.menuImage}
+            />
           </TouchableOpacity>
+
           <TouchableOpacity onPress={() => router.push("/perfil")}>
-            <Text style={styles.menuIcon}>👤</Text>
+            <Image
+              source={require("../../assets/images/perfil.jpeg")}
+              style={styles.menuImage}
+            />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/chat")}>
-            <Text style={styles.menuIcon}>💬</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/configuracoes")}>
-            <Text style={styles.menuIcon}>⚙️</Text>
+
+          <TouchableOpacity onPress={() => router.push("/grupo")}>
+            <Image
+              source={require("../../assets/images/zap.jpeg")}
+              style={styles.menuImage}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -172,114 +206,125 @@ export default function Clinicas() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "#222",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  phone: {
-    width: 390,
-    height: 844,
     backgroundColor: "#EAF8FF",
-    borderRadius: 32,
-    overflow: "hidden",
-    paddingHorizontal: 20,
   },
+
+  phone: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#EAF8FF",
+    overflow: "hidden",
+  },
+
   topBar: {
-    height: 70,
-    backgroundColor: "#fff",
-    marginHorizontal: -20,
-    paddingHorizontal: 22,
+    height: 58,
+    backgroundColor: "#FFF",
+    paddingHorizontal: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
+
   logo: {
-    color: "#087bdc",
-    fontSize: 14,
-    fontWeight: "900",
-    lineHeight: 15,
+    width: 82,
+    height: 34,
+    resizeMode: "contain",
   },
+
   avatar: {
-    fontSize: 26,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#EEE",
+    alignItems: "center",
+    justifyContent: "center",
   },
+
+  avatarText: {
+    fontSize: 22,
+  },
+
+  content: {
+    paddingHorizontal: 18,
+    paddingBottom: 95,
+  },
+
   back: {
-    color: "#087bdc",
-    fontSize: 34,
-    marginTop: 10,
+    color: "#087BDC",
+    fontSize: 32,
+    marginTop: 8,
+    marginBottom: 2,
   },
+
   title: {
-    color: "#087bdc",
+    color: "#087BDC",
     fontSize: 17,
     fontWeight: "900",
     marginBottom: 14,
   },
+
   searchBox: {
-    height: 42,
-    backgroundColor: "#fff",
+    height: 40,
+    backgroundColor: "#FFF",
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#bbb",
+    borderColor: "#BBB",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
     marginBottom: 8,
   },
+
   searchInput: {
     flex: 1,
-    height: 42,
+    height: 40,
     fontSize: 12,
   },
+
   searchIcon: {
     fontSize: 22,
     color: "#444",
   },
+
   filter: {
     alignSelf: "flex-start",
-    color: "#087bdc",
+    color: "#087BDC",
     borderWidth: 1,
-    borderColor: "#087bdc",
+    borderColor: "#087BDC",
     borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 3,
     fontSize: 10,
     marginBottom: 12,
   },
+
   map: {
-    height: 160,
-    backgroundColor: "#eee",
+    width: "100%",
+    height: 210,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#bbb",
-    alignItems: "center",
-    justifyContent: "center",
+    borderColor: "#BBB",
+    resizeMode: "cover",
     marginBottom: 14,
   },
-  mapText: {
-    fontSize: 55,
-  },
-  pin: {
-    position: "absolute",
-    top: 40,
-    right: 120,
-    fontSize: 28,
-  },
-  list: {
-    flex: 1,
-  },
+
   loading: {
-    color: "#087bdc",
+    color: "#087BDC",
     fontWeight: "800",
     textAlign: "center",
     marginTop: 20,
   },
+
   empty: {
-    color: "#087bdc",
+    color: "#087BDC",
     fontWeight: "800",
     textAlign: "center",
     marginTop: 20,
   },
+
   clinicCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
     borderRadius: 14,
     padding: 14,
     marginBottom: 12,
@@ -288,55 +333,63 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
+
   clinicTitle: {
     fontSize: 15,
     fontWeight: "900",
     color: "#333",
     marginBottom: 5,
   },
+
   clinicText: {
     fontSize: 10,
     color: "#555",
     lineHeight: 13,
     marginBottom: 6,
   },
+
   address: {
     fontSize: 10,
-    color: "#087bdc",
+    color: "#087BDC",
     fontWeight: "700",
     marginBottom: 10,
   },
+
   buttonsRow: {
     flexDirection: "row",
     gap: 8,
   },
+
   smallButton: {
-    backgroundColor: "#087bdc",
-    color: "#fff",
+    backgroundColor: "#087BDC",
+    color: "#FFF",
     fontSize: 10,
     fontWeight: "900",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
   },
+
   bottomMenu: {
     position: "absolute",
     bottom: 18,
-    left: 55,
-    right: 55,
-    height: 52,
-    backgroundColor: "#fff",
-    borderRadius: 20,
+    width: 180,
+    height: 48,
+    alignSelf: "center",
+    backgroundColor: "#FFF",
+    borderRadius: 18,
     flexDirection: "row",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    justifyContent: "space-around",
     shadowColor: "#000",
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.18,
     shadowRadius: 8,
     elevation: 8,
   },
-  menuIcon: {
-    fontSize: 24,
-    color: "#087bdc",
+
+  menuImage: {
+    width: 22,
+    height: 22,
+    resizeMode: "contain",
   },
 });

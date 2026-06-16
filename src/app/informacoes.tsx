@@ -1,20 +1,72 @@
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Linking,
+  Alert,
+} from "react-native";
 import { router } from "expo-router";
 
 export default function Informacoes() {
   const itens = [
-    { tipo: "PDF", emoji: "📘", titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:" },
-    { tipo: "VÍDEOS", emoji: "🎬", titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:" },
-    { tipo: "VÍDEOS", emoji: "🎥", titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:" },
-    { tipo: "PDF", emoji: "📘", titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:" },
+    {
+      tipo: "PDF",
+      imagem: require("../../assets/images/desigualdades.jpeg"),
+      titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:",
+      link: "https://revistas.ufrj.br/index.php/desidades/article/view/68499/43509",
+    },
+    {
+      tipo: "VÍDEOS",
+      imagem: require("../../assets/images/diagnostico.jpeg"),
+      titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:",
+      link: "https://www.youtube.com/watch?v=ZkFWSDJE9P0",
+    },
+    {
+      tipo: "VÍDEOS",
+      imagem: require("../../assets/images/causas.jpeg"),
+      titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:",
+      link: "https://www.youtube.com/watch?v=NNaiwC6tnQQ",
+    },
+    {
+      tipo: "PDF",
+      imagem: require("../../assets/images/desigualdades.jpeg"),
+      titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:",
+      link: "https://revistas.ufrj.br/index.php/desidades/article/view/68499/43509",
+    },
   ];
+
+  async function abrirLink(link: string) {
+    try {
+      const podeAbrir = await Linking.canOpenURL(link);
+
+      if (podeAbrir) {
+        await Linking.openURL(link);
+      } else {
+        Alert.alert("Erro", "Não foi possível abrir este link.");
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Ocorreu um problema ao abrir o link.");
+    }
+  }
 
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
         <View style={styles.topBar}>
-          <Text style={styles.logo}>VIDA{"\n"}TEA</Text>
-          <Text style={styles.avatar}>👤</Text>
+          <Image
+            source={require("../../assets/images/logopequeno.jpeg")}
+            style={styles.logo}
+          />
+
+          <TouchableOpacity
+            style={styles.avatar}
+            onPress={() => router.push("/perfil")}
+          >
+            <Text style={styles.avatarText}>👤</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity onPress={() => router.push("/home")}>
@@ -23,21 +75,29 @@ export default function Informacoes() {
 
         <Text style={styles.title}>Central de Informações</Text>
 
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.list}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.list}
+        >
           {itens.map((item, index) => (
-            <TouchableOpacity style={styles.card} key={index}>
+            <TouchableOpacity
+              style={styles.card}
+              key={index}
+              onPress={() => abrirLink(item.link)}
+            >
               <View style={styles.cardTop}>
                 <Text style={styles.type}>{item.tipo}</Text>
                 <Text style={styles.date}>14/09/2025</Text>
               </View>
 
               <View style={styles.cardContent}>
-                <View style={styles.thumb}>
-                  <Text style={styles.thumbEmoji}>{item.emoji}</Text>
-                </View>
+                <Image source={item.imagem} style={styles.thumb} />
 
                 <View style={styles.info}>
                   <Text style={styles.cardTitle}>{item.titulo}</Text>
+
+                  <View style={styles.divider} />
+
                   <Text style={styles.desc}>
                     Incidência nas políticas públicas e na organização do cuidado
                   </Text>
@@ -49,11 +109,25 @@ export default function Informacoes() {
 
         <View style={styles.bottomMenu}>
           <TouchableOpacity onPress={() => router.push("/home")}>
-            <Text style={styles.menuIcon}>⌂</Text>
+            <Image
+              source={require("../../assets/images/home.jpeg")}
+              style={styles.menuImage}
+            />
           </TouchableOpacity>
-          <Text style={styles.menuIcon}>👤</Text>
-          <Text style={styles.menuIcon}>💬</Text>
-          <Text style={styles.menuIcon}>⚙️</Text>
+
+          <TouchableOpacity onPress={() => router.push("/perfil")}>
+            <Image
+              source={require("../../assets/images/perfil.jpeg")}
+              style={styles.menuImage}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push("/grupo")}>
+            <Image
+              source={require("../../assets/images/zap.jpeg")}
+              style={styles.menuImage}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -61,123 +135,152 @@ export default function Informacoes() {
 }
 
 const styles = StyleSheet.create({
-  background: {
+   background: {
     flex: 1,
-    backgroundColor: "#222",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  phone: {
-    width: 390,
-    height: 844,
     backgroundColor: "#EAF8FF",
-    borderRadius: 32,
-    overflow: "hidden",
-    paddingHorizontal: 20,
   },
+
+  phone: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#EAF8FF",
+    overflow: "hidden",
+  },
+
   topBar: {
-    height: 70,
-    backgroundColor: "#fff",
-    marginHorizontal: -20,
-    paddingHorizontal: 22,
+    height: 58,
+    backgroundColor: "#FFF",
+    paddingHorizontal: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
+
   logo: {
-    color: "#087bdc",
-    fontSize: 14,
-    fontWeight: "900",
-    lineHeight: 15,
+    width: 82,
+    height: 34,
+    resizeMode: "contain",
   },
+
   avatar: {
-    fontSize: 26,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#EEE",
+    alignItems: "center",
+    justifyContent: "center",
   },
+
+  avatarText: {
+    fontSize: 22,
+  },
+
   back: {
-    color: "#087bdc",
-    fontSize: 34,
-    marginTop: 10,
+    color: "#087BDC",
+    fontSize: 32,
+    marginLeft: 18,
+    marginTop: 8,
+    marginBottom: 2,
   },
+
   title: {
-    color: "#087bdc",
+    color: "#087BDC",
     fontSize: 18,
     fontWeight: "900",
-    marginBottom: 14,
+    marginLeft: 18,
+    marginBottom: 12,
   },
+
   list: {
+    paddingHorizontal: 18,
     paddingBottom: 95,
   },
+
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
     borderRadius: 14,
     padding: 10,
     marginBottom: 14,
     shadowColor: "#000",
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.14,
     shadowRadius: 8,
     elevation: 5,
   },
+
   cardTop: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    marginBottom: 7,
   },
+
   type: {
-    fontSize: 11,
+    fontSize: 10,
     color: "#333",
     fontWeight: "800",
   },
+
   date: {
-    fontSize: 10,
-    color: "#aaa",
+    fontSize: 9,
+    color: "#AAA",
   },
+
   cardContent: {
     flexDirection: "row",
     gap: 10,
   },
+
   thumb: {
-    width: 120,
-    height: 70,
-    backgroundColor: "#D8F1FF",
+    width: 122,
+    height: 68,
     borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
+    resizeMode: "cover",
   },
-  thumbEmoji: {
-    fontSize: 34,
-  },
+
   info: {
     flex: 1,
   },
+
   cardTitle: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "900",
     color: "#111",
-    marginBottom: 5,
-  },
-  desc: {
-    fontSize: 10,
-    color: "#555",
     lineHeight: 13,
   },
+
+  divider: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "#087BDC",
+    marginVertical: 4,
+  },
+
+  desc: {
+    fontSize: 9,
+    color: "#555",
+    lineHeight: 12,
+  },
+
   bottomMenu: {
     position: "absolute",
     bottom: 18,
-    left: 55,
-    right: 55,
-    height: 52,
-    backgroundColor: "#fff",
-    borderRadius: 20,
+    width: 180,
+    height: 48,
+    alignSelf: "center",
+    backgroundColor: "#FFF",
+    borderRadius: 18,
     flexDirection: "row",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    justifyContent: "space-around",
     shadowColor: "#000",
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.18,
     shadowRadius: 8,
     elevation: 8,
   },
-  menuIcon: {
-    fontSize: 24,
-    color: "#087bdc",
+
+  menuImage: {
+    width: 22,
+    height: 22,
+    resizeMode: "contain",
   },
 });
