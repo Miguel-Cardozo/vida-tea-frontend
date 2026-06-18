@@ -12,7 +12,6 @@ import { router } from "expo-router";
 import { apiFetch } from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -36,7 +35,20 @@ export default function Login() {
       });
 
       console.log("Login realizado:", resposta);
-      await AsyncStorage.setItem("usuario", JSON.stringify(resposta.usuario));
+
+      if (resposta.token) {
+        await AsyncStorage.setItem("token", resposta.token);
+      }
+
+      const usuarioParaSalvar = resposta.usuario || resposta.user || {
+        nome: resposta.nome || "Usuário",
+        email: email,
+      };
+
+      await AsyncStorage.setItem(
+        "usuario",
+        JSON.stringify(usuarioParaSalvar)
+      );
 
       Alert.alert("Sucesso", "Login realizado com sucesso!");
       router.push("/home");
