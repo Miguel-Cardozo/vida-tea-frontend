@@ -12,19 +12,41 @@ import {
   ScrollView,
 } from "react-native";
 import { router } from "expo-router";
+import { apiFetch } from "../services/api";
 
 export default function Chat() {
   const [mensagem, setMensagem] = useState("");
   const [mensagens, setMensagens] = useState<string[]>([]);
+  const [carregando, setCarregando] = useState(false);
 
-  function enviarMensagem() {
+  async function enviarMensagem() {
     if (!mensagem.trim()) {
       Alert.alert("Atenção", "Digite uma mensagem antes de enviar.");
       return;
     }
 
-    setMensagens((anteriores) => [...anteriores, mensagem]);
-    setMensagem("");
+    try {
+      setCarregando(true);
+
+      await apiFetch("/mensagens", {
+        method: "POST",
+        body: JSON.stringify({
+          nome: "Usuário Vida TEA",
+          email: "nao-informado@app.com",
+          assunto: "Dúvida enviada pelo aplicativo Vida TEA",
+          mensagem,
+        }),
+      });
+
+      setMensagens((anteriores) => [...anteriores, mensagem]);
+      setMensagem("");
+
+      Alert.alert("Sucesso", "Sua mensagem foi enviada para a equipe Vida TEA.");
+    } catch (error: any) {
+      Alert.alert("Erro", error.message || "Não foi possível enviar a mensagem.");
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -85,10 +107,16 @@ export default function Chat() {
             placeholderTextColor="#777"
             returnKeyType="send"
             onSubmitEditing={enviarMensagem}
+            editable={!carregando}
+            multiline
           />
 
-          <TouchableOpacity onPress={enviarMensagem} style={styles.sendButton}>
-            <Text style={styles.send}>➤</Text>
+          <TouchableOpacity
+            onPress={enviarMensagem}
+            style={styles.sendButton}
+            disabled={carregando}
+          >
+            <Text style={styles.send}>{carregando ? "..." : "➤"}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -97,17 +125,8 @@ export default function Chat() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
-
-  phone: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#FFF",
-  },
+  background: { flex: 1, backgroundColor: "#FFF" },
+  phone: { flex: 1, width: "100%", height: "100%", backgroundColor: "#FFF" },
 
   topBar: {
     height: 70,
@@ -118,11 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  logo: {
-    width: 95,
-    height: 45,
-    resizeMode: "contain",
-  },
+  logo: { width: 95, height: 45, resizeMode: "contain" },
 
   avatar: {
     width: 45,
@@ -133,9 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  avatarText: {
-    fontSize: 24,
-  },
+  avatarText: { fontSize: 24 },
 
   back: {
     color: "#087BDC",
@@ -160,9 +173,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
 
-  avatarMini: {
-    fontSize: 32,
-  },
+  avatarMini: { fontSize: 32 },
 
   helperText: {
     color: "#777",
@@ -187,10 +198,7 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
   },
 
-  messageText: {
-    color: "#333",
-    fontSize: 14,
-  },
+  messageText: { color: "#333", fontSize: 14 },
 
   confirmText: {
     alignSelf: "flex-end",
@@ -201,23 +209,27 @@ const styles = StyleSheet.create({
   },
 
   inputArea: {
-    height: 52,
+    minHeight: 75,
     backgroundColor: "#FFF",
-    borderWidth: 1,
-    borderColor: "#CCC",
-    borderRadius: 26,
+    borderWidth: 1.5,
+    borderColor: "#087BDC",
+    borderRadius: 20,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
+    paddingVertical: 8,
     marginHorizontal: 20,
-    marginBottom: 12,
+    marginBottom: 25, 
   },
 
   input: {
     flex: 1,
-    height: 52,
+    minHeight: 50,
+    maxHeight: 120,
     fontSize: 16,
     color: "#111",
+    paddingVertical: 8,
+    textAlignVertical: "center",
   },
 
   sendButton: {

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   View,
   Text,
@@ -5,12 +6,50 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { router } from "expo-router";
+import { apiFetch } from "../services/api";
 
 export default function Duvidas() {
+  const [mensagem, setMensagem] = useState("");
+  const [carregando, setCarregando] = useState(false);
+
+  async function enviarMensagem() {
+    if (!mensagem.trim()) {
+      Alert.alert("Atenção", "Digite uma mensagem antes de enviar.");
+      return;
+    }
+
+    try {
+      setCarregando(true);
+
+      await apiFetch("/mensagens", {
+        method: "POST",
+        body: JSON.stringify({
+          nome: "Usuário Vida TEA",
+          email: "nao-informado@app.com",
+          assunto: "Dúvida enviada pelo aplicativo Vida TEA",
+          mensagem,
+        }),
+      });
+
+      Alert.alert("Sucesso", "Sua mensagem foi enviada para a equipe Vida TEA.");
+      setMensagem("");
+    } catch (error: any) {
+      Alert.alert("Erro", error.message || "Não foi possível enviar a mensagem.");
+    } finally {
+      setCarregando(false);
+    }
+  }
+
   return (
-    <View style={styles.background}>
+    <KeyboardAvoidingView
+      style={styles.background}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <View style={styles.phone}>
         <View style={styles.topBar}>
           <Image
@@ -18,10 +57,7 @@ export default function Duvidas() {
             style={styles.logo}
           />
 
-          <TouchableOpacity
-            style={styles.avatar}
-            onPress={() => router.push("/perfil")}
-          >
+          <TouchableOpacity style={styles.avatar} onPress={() => router.push("/perfil")}>
             <Text style={styles.avatarText}>👤</Text>
           </TouchableOpacity>
         </View>
@@ -30,15 +66,10 @@ export default function Duvidas() {
           <Text style={styles.back}>‹</Text>
         </TouchableOpacity>
 
-        <Text style={styles.title}>
-          Tire suas dúvidas com especialistas
-        </Text>
+        <Text style={styles.title}>Tire suas dúvidas com especialistas</Text>
 
         <View style={styles.messageRow}>
-          <View style={styles.userCircle}>
-            <Text style={styles.userIcon}>👤</Text>
-          </View>
-
+          <Text style={styles.userIcon}>👤</Text>
           <Text style={styles.helpText}>
             Preencha o campo abaixo com sua pergunta.
           </Text>
@@ -46,49 +77,37 @@ export default function Duvidas() {
 
         <View style={styles.inputArea}>
           <TextInput
-            placeholder="Sua mensagem..."
-            placeholderTextColor="#999"
+            placeholder="Digite sua mensagem..."
+            placeholderTextColor="#777"
             style={styles.input}
+            value={mensagem}
+            onChangeText={setMensagem}
+            multiline
+            editable={!carregando}
           />
 
-          <TouchableOpacity>
-            <Text style={styles.send}>✈</Text>
+          <TouchableOpacity onPress={enviarMensagem} disabled={carregando}>
+            <Text style={styles.send}>{carregando ? "..." : "✈️"}</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  
-  background: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
+  background: { flex: 1, backgroundColor: "#FFF" },
+  phone: { flex: 1, backgroundColor: "#FFF" },
 
-  phone: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#FFF",
-    overflow: "hidden",
-  },
-  
   topBar: {
     height: 58,
-    backgroundColor: "#FFF",
     paddingHorizontal: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
 
-  logo: {
-    width: 82,
-    height: 34,
-    resizeMode: "contain",
-  },
+  logo: { width: 82, height: 34, resizeMode: "contain" },
 
   avatar: {
     width: 42,
@@ -99,9 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  avatarText: {
-    fontSize: 22,
-  },
+  avatarText: { fontSize: 22 },
 
   back: {
     color: "#087BDC",
@@ -112,11 +129,11 @@ const styles = StyleSheet.create({
 
   title: {
     color: "#087BDC",
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "900",
     marginTop: 8,
     marginHorizontal: 18,
-    marginBottom: 26,
+    marginBottom: 40,
   },
 
   messageRow: {
@@ -125,53 +142,46 @@ const styles = StyleSheet.create({
     marginHorizontal: 18,
   },
 
-  userCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#FFF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
-
   userIcon: {
-    fontSize: 22,
+    fontSize: 28,
+    marginRight: 16,
   },
 
   helpText: {
     color: "#777",
-    fontSize: 11,
+    fontSize: 16,
     flex: 1,
   },
 
   inputArea: {
     position: "absolute",
-    bottom: 18,
-    left: 12,
-    right: 12,
-    height: 42,
-
+    bottom: 20,
+    left: 16,
+    right: 16,
+    minHeight: 70,
     backgroundColor: "#FFF",
     borderRadius: 20,
-
-    borderWidth: 1,
-    borderColor: "#DDD",
-
+    borderWidth: 1.5,
+    borderColor: "#087BDC",
     flexDirection: "row",
     alignItems: "center",
-
     paddingHorizontal: 14,
+    paddingVertical: 8,
   },
 
   input: {
     flex: 1,
-    height: 42,
-    fontSize: 12,
+    minHeight: 45,
+    maxHeight: 110,
+    fontSize: 16,
+    color: "#111",
+    paddingVertical: 8,
+    textAlignVertical: "top",
   },
 
   send: {
-    fontSize: 20,
-    color: "#666",
+    fontSize: 24,
+    color: "#087BDC",
+    marginLeft: 8,
   },
 });
