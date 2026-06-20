@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home() {
   const [nomeUsuario, setNomeUsuario] = useState("Usuário");
+  const [avatar, setAvatar] = useState("👤");
 
   useEffect(() => {
     async function carregarUsuario() {
@@ -19,6 +20,7 @@ export default function Home() {
       if (usuarioSalvo) {
         const usuario = JSON.parse(usuarioSalvo);
         setNomeUsuario(usuario.nome || "Usuário");
+        setAvatar(usuario.avatar || "👤");
       }
     }
 
@@ -38,7 +40,7 @@ export default function Home() {
             style={styles.avatar}
             onPress={() => router.push("/perfil")}
           >
-            <Text style={styles.avatarText}>👤</Text>
+            <Text style={styles.avatarText}>{avatar}</Text>
           </TouchableOpacity>
         </View>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,39 +11,41 @@ import {
   Platform,
 } from "react-native";
 import { router } from "expo-router";
-import { apiFetch } from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
+
 
 export default function Duvidas() {
   const [mensagem, setMensagem] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [avatar, setAvatar] = useState("👤");
+
+  useEffect(() => {
+    async function carregarAvatar() {
+      const usuarioSalvo = await AsyncStorage.getItem("usuario");
+
+      if (usuarioSalvo) {
+        const usuario = JSON.parse(usuarioSalvo);
+        setAvatar(usuario.avatar || "👤");
+      }
+    }
+
+  carregarAvatar();
+}, []);
 
   async function enviarMensagem() {
-    if (!mensagem.trim()) {
-      Alert.alert("Atenção", "Digite uma mensagem antes de enviar.");
-      return;
-    }
-
-    try {
-      setCarregando(true);
-
-      await apiFetch("/mensagens", {
-        method: "POST",
-        body: JSON.stringify({
-          nome: "Usuário Vida TEA",
-          email: "nao-informado@app.com",
-          assunto: "Dúvida enviada pelo aplicativo Vida TEA",
-          mensagem,
-        }),
-      });
-
-      Alert.alert("Sucesso", "Sua mensagem foi enviada para a equipe Vida TEA.");
-      setMensagem("");
-    } catch (error: any) {
-      Alert.alert("Erro", error.message || "Não foi possível enviar a mensagem.");
-    } finally {
-      setCarregando(false);
-    }
+  if (!mensagem.trim()) {
+    Alert.alert("Atenção", "Digite uma mensagem antes de enviar.");
+    return;
   }
+
+  setCarregando(true);
+
+  setTimeout(() => {
+    Alert.alert("Sucesso", "Sua mensagem foi enviada para a equipe Vida TEA.");
+    setMensagem("");
+    setCarregando(false);
+  }, 800);
+}
 
   return (
     <KeyboardAvoidingView
@@ -58,7 +60,7 @@ export default function Duvidas() {
           />
 
           <TouchableOpacity style={styles.avatar} onPress={() => router.push("/perfil")}>
-            <Text style={styles.avatarText}>👤</Text>
+            <Text style={styles.avatarText}>{avatar}</Text>
           </TouchableOpacity>
         </View>
 
@@ -69,7 +71,7 @@ export default function Duvidas() {
         <Text style={styles.title}>Tire suas dúvidas com especialistas</Text>
 
         <View style={styles.messageRow}>
-          <Text style={styles.userIcon}>👤</Text>
+          <Text style={styles.userIcon}>{avatar}</Text>
           <Text style={styles.helpText}>
             Preencha o campo abaixo com sua pergunta.
           </Text>

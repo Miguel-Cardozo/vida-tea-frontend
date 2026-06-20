@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,8 +10,23 @@ import {
   Alert,
 } from "react-native";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Informacoes() {
+  const [avatar, setAvatar] = useState("👤");
+
+  useEffect(() => {
+    async function carregarAvatar() {
+      const usuarioSalvo = await AsyncStorage.getItem("usuario");
+
+      if (usuarioSalvo) {
+        const usuario = JSON.parse(usuarioSalvo);
+        setAvatar(usuario.avatar || "👤");
+      }
+    }
+
+    carregarAvatar();
+  }, []);
   const itens = [
     {
       tipo: "PDF",
@@ -65,7 +81,7 @@ export default function Informacoes() {
             style={styles.avatar}
             onPress={() => router.push("/perfil")}
           >
-            <Text style={styles.avatarText}>👤</Text>
+            <Text style={styles.avatarText}>{avatar}</Text>
           </TouchableOpacity>
         </View>
 

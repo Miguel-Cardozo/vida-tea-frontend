@@ -21,8 +21,8 @@ export default function EsqueciSenha() {
           <Text style={styles.title}>Esqueceu a senha?</Text>
 
           <Text style={styles.description}>
-            Enviaremos um e-mail para a autenticação e{"\n"}
-            recuperação de senha.
+            Caso o e-mail esteja cadastrado, enviaremos{"\n"}
+            as instuções para redefinição da senha.
           </Text>
 
           <TextInput

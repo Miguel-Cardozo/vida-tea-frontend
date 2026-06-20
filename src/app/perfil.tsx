@@ -11,6 +11,15 @@ import {
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const avatares = [
+  { id: "mulher1", icon: "👩🏻", label: "Mulher 1" },
+  { id: "mulher2", icon: "👩🏿", label: "Mulher 2" },
+  { id: "mulher3", icon: "👩🏻‍🦰", label: "Mulher 3" },
+  { id: "homem1", icon: "👨🏻", label: "Homem 1" },
+  { id: "homem2", icon: "👨🏿", label: "Homem 2" },
+  { id: "homem3", icon: "👨🏻‍🦰", label: "Homem 3" },
+];
+
 export default function Perfil() {
   const [editando, setEditando] = useState(false);
   const [nome, setNome] = useState("Usuário");
@@ -18,6 +27,8 @@ export default function Perfil() {
   const [telefone, setTelefone] = useState("");
   const [genero, setGenero] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
+  const [avatar, setAvatar] = useState("👤");
+  
 
   async function carregarUsuario() {
     const usuarioSalvo = await AsyncStorage.getItem("usuario");
@@ -30,6 +41,7 @@ export default function Perfil() {
       setTelefone(usuario.telefone || "");
       setGenero(usuario.genero || "");
       setDataNascimento(usuario.dataNascimento || "");
+      setAvatar(usuario.avatar || "👤");
     }
   }
 
@@ -40,6 +52,7 @@ export default function Perfil() {
       telefone,
       genero,
       dataNascimento,
+      avatar,
     };
 
     await AsyncStorage.setItem("usuario", JSON.stringify(usuarioAtualizado));
@@ -62,7 +75,7 @@ export default function Perfil() {
           />
 
           <View style={styles.avatarSmall}>
-            <Text style={styles.avatarIcon}>👤</Text>
+            <Text style={styles.avatarIcon}>{avatar}</Text>
           </View>
         </View>
 
@@ -72,7 +85,7 @@ export default function Perfil() {
 
         <View style={styles.card}>
           <View style={styles.photo}>
-            <Text style={styles.photoIcon}>👤</Text>
+            <Text style={styles.photoIcon}>{avatar}</Text>
           </View>
 
           <Text style={styles.name}>{nome}</Text>
@@ -83,6 +96,23 @@ export default function Perfil() {
           >
             <Text style={styles.editText}>Editar Perfil</Text>
           </TouchableOpacity>
+
+          {editando && (
+            <View style={styles.avatarGrid}>
+              {avatares.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={[
+                    styles.avatarOption,
+                    avatar === item.icon && styles.avatarSelected,
+                  ]}
+                  onPress={() => setAvatar(item.icon)}
+                >
+                  <Text style={styles.avatarOptionText}>{item.icon}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
 
           <Text style={styles.sectionTitle}>Suas informações 🔒</Text>
 
@@ -311,4 +341,31 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     fontSize: 16,
   },
+  avatarGrid: {
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  gap: 10,
+  marginTop: 14,
+},
+
+avatarOption: {
+  width: 48,
+  height: 48,
+  borderRadius: 24,
+  backgroundColor: "#EEE",
+  alignItems: "center",
+  justifyContent: "center",
+  borderWidth: 2,
+  borderColor: "transparent",
+},
+
+avatarSelected: {
+  borderColor: "#087BDC",
+  backgroundColor: "#EAF8FF",
+},
+
+avatarOptionText: {
+  fontSize: 28,
+},
 });

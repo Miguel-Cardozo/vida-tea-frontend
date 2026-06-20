@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import { apiFetch } from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Clinica = {
   id: number;
@@ -29,6 +30,20 @@ export default function Clinicas() {
   const [clinicas, setClinicas] = useState<Clinica[]>([]);
   const [busca, setBusca] = useState("");
   const [carregando, setCarregando] = useState(true);
+  const [avatar, setAvatar] = useState("👤");
+
+  useEffect(() => {
+    async function carregarAvatar() {
+      const usuarioSalvo = await AsyncStorage.getItem("usuario");
+
+      if (usuarioSalvo) {
+        const usuario = JSON.parse(usuarioSalvo);
+        setAvatar(usuario.avatar || "👤");
+      }
+    }
+
+    carregarAvatar();
+  }, []);
 
   async function carregarClinicas() {
     try {
@@ -109,7 +124,7 @@ export default function Clinicas() {
             style={styles.avatar}
             onPress={() => router.push("/perfil")}
           >
-            <Text style={styles.avatarText}>👤</Text>
+            <Text style={styles.avatarText}>{avatar}</Text>
           </TouchableOpacity>
         </View>
 

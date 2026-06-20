@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~54.0.0",
     "expo-image": "~3.0.11",

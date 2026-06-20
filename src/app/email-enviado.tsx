@@ -25,8 +25,8 @@ export default function EmailEnviado() {
           <Text style={styles.title}>E-mail enviado!</Text>
 
           <Text style={styles.description}>
-            Aguarde o e-mail para realizar a{"\n"}
-            recuperação de senha.
+            Se o e-mail estiver cadastrado em nossa base de dados, você receberá as{"\n"}
+            instruções de recuperação.
           </Text>
 
           <TouchableOpacity

@@ -1,4 +1,5 @@
-import {
+import { useEffect, useState } from "react";
+import{
   View,
   Text,
   TouchableOpacity,
@@ -7,8 +8,23 @@ import {
   Image,
 } from "react-native";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Grupo() {
+  const [avatar, setAvatar] = useState("👤");
+
+  useEffect(() => {
+    async function carregarAvatar() {
+      const usuarioSalvo = await AsyncStorage.getItem("usuario");
+
+      if (usuarioSalvo) {
+        const usuario = JSON.parse(usuarioSalvo);
+        setAvatar(usuario.avatar || "👤");
+      }
+    }
+
+    carregarAvatar();
+  }, []);
   function abrirWhatsapp() {
     Linking.openURL("https://wa.me/");
   }
@@ -26,7 +42,7 @@ export default function Grupo() {
             style={styles.avatar}
             onPress={() => router.push("/perfil")}
           >
-            <Text style={styles.avatarText}>👤</Text>
+            <Text style={styles.avatarText}>{avatar}</Text>
           </TouchableOpacity>
         </View>
 

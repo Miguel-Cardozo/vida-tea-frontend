@@ -1,3 +1,4 @@
+import {  useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,8 +9,23 @@ import {
   Linking,
 } from "react-native";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
 
 export default function Beneficios() {
+  const [avatar, setAvatar] = useState("👤");
+
+  useEffect(() => {
+    async function carregarAvatar() {
+      const usuarioSalvo = await AsyncStorage.getItem("usuario");
+
+      if (usuarioSalvo) {
+        const usuario = JSON.parse(usuarioSalvo);
+        setAvatar(usuario.avatar || "👤");
+      }
+    }
+
+    carregarAvatar();
+  }, []);
   return (
     <View style={styles.background}>
       <View style={styles.phone}>
@@ -23,7 +39,7 @@ export default function Beneficios() {
             style={styles.avatar}
             onPress={() => router.push("/perfil")}
           >
-            <Text style={styles.avatarText}>👤</Text>
+            <Text style={styles.avatarText}>{avatar}</Text>
           </TouchableOpacity>
         </View>
 
