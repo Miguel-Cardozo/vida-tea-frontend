@@ -38,13 +38,13 @@ export default function Informacoes() {
       tipo: "VÍDEOS",
       imagem: require("../../assets/images/diagnostico.jpeg"),
       titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:",
-      link: "https://www.youtube.com/watch?v=ZkFWSDJE9P0",
+      link: "https://youtu.be/ZkFWSDJE9P0",
     },
     {
       tipo: "VÍDEOS",
       imagem: require("../../assets/images/causas.jpeg"),
       titulo: "A expansão do diagnóstico de autismo no contexto brasileiro atual:",
-      link: "https://www.youtube.com/watch?v=NNaiwC6tnQQ",
+      link: "https://youtu.be/NNaiwC6tnQQ",
     },
     {
       tipo: "PDF",
