@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as WebBrowser from "expo-web-browser";
 
 export default function Informacoes() {
   const [avatar, setAvatar] = useState("👤");
@@ -54,17 +55,11 @@ export default function Informacoes() {
     },
   ];
 
-  async function abrirLink(link: string) {
+    async function abrirLink(link: string) {
     try {
-      const podeAbrir = await Linking.canOpenURL(link);
-
-      if (podeAbrir) {
-        await Linking.openURL(link);
-      } else {
-        Alert.alert("Erro", "Não foi possível abrir este link.");
-      }
+      await WebBrowser.openBrowserAsync(link);
     } catch (error) {
-      Alert.alert("Erro", "Ocorreu um problema ao abrir o link.");
+      Alert.alert("Erro", "Não foi possível abrir este link.");
     }
   }
 
