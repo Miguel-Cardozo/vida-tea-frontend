@@ -26,7 +26,7 @@ export default function Grupo() {
     carregarAvatar();
   }, []);
   function abrirWhatsapp() {
-    Linking.openURL("https://wa.me/");
+    Linking.openURL("https://chat.whatsapp.com/BWrm3p4pYIqKZTjM3Pji6i?mode=gi_t");
   }
 
   return (

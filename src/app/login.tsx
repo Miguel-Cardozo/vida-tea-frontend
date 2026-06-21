@@ -115,16 +115,6 @@ export default function Login() {
               Termos de Uso e Política de Privacidade
             </Text>
           </TouchableOpacity>
-
-          <View style={styles.divider}>
-            <View style={styles.line} />
-            <Text style={styles.dividerText}>Entrar com</Text>
-            <View style={styles.line} />
-          </View>
-
-          <TouchableOpacity style={styles.googleButton}>
-            <Text style={styles.googleText}>G Google</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -218,36 +208,5 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
     marginVertical: 20,
-  },
-
-  divider: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 18,
-  },
-
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#087BDC",
-  },
-
-  dividerText: {
-    color: "#087BDC",
-    fontSize: 11,
-    marginHorizontal: 10,
-  },
-
-  googleButton: {
-    backgroundColor: "#E5F6FF",
-    borderRadius: 8,
-    paddingVertical: 14,
-  },
-
-  googleText: {
-    color: "#087BDC",
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "800",
   },
 });
